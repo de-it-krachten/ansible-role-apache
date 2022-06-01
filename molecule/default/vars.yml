@@ -1,0 +1,9 @@
+---
+
+openssl_fqdn: server.example.com
+apache_fqdn: server.example.com
+apache_vhostdir: /var/www
+apache_ssl_key: "{{ openssl_server_key }}"
+apache_ssl_crt: "{{ openssl_server_crt }}"
+apache_ssl_chain: "{{ openssl_server_crt }}"
+apache_vhosts: "[{'vhost': 'vhost1.example.com', 'alias': 'vhost1-alias.example.com', 'domain': 'vhost1.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}, {'vhost': 'vhost2.example.com', 'alias': 'vhost2-alias.example.com', 'domain': 'vhost2.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}]"
