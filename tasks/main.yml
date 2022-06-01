@@ -1,0 +1,111 @@
+---
+
+- name: Load variables based on OS type
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution }}.yml"
+        - "family-{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+        - "family-{{ ansible_os_family }}.yml"
+        - default.yml
+      paths:
+        - "vars"
+
+- name: Install all apache packages
+  package:
+    name: "{{ apache_packages }}"
+    state: present
+
+- name: Activate SSL using a2enmod
+  command: a2enmod ssl
+  register: _a2enmod_ssl
+  changed_when: "_a2enmod_ssl.stdout is not search('Module ssl already enabled')"
+  when: ansible_os_family == 'Debian'
+
+- name: Configure SSL keys & certificates
+  replace:
+    path: '{{ apache_ssl_conf }}'
+    regexp: '^(#)?{{ item.key }} .*'
+    replace: '{{ item.key }} {{ item.value }}'
+  loop: "{{ apache_ssl_settings | dict2items }}"
+  when: apache_ssl|bool
+  notify: Restart apache
+
+- name: Configure vhosts
+  template:
+    src: templates/{{ item.template }}
+    dest: '{{ apache_conf_dir }}/{{ item.vhost }}.conf'
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+  when: apache_ssl|bool
+  notify: Restart apache
+
+- name: Create vhosts document root
+  file:
+    path: "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+
+- name: Create vhosts log directory
+  file:
+    path: "{{ item.errorlog | default(apache_vhostdir+'/'+item.vhost+'/log/error.log') | dirname }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+
+- name: Activate vhosts
+  file:
+    src: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
+    dest: /etc/apache2/sites-enabled/{{ item.vhost }}.conf
+    owner: root
+    group: root
+    state: link
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+  notify: Restart apache
+  when: ansible_os_family == 'Debian'
+
+- name: Create vhost directories
+  file:
+    path: "{{ apache_vhostdir }}/{{ item.vhost }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+  notify: Restart apache
+
+- name: xxx
+  copy:
+    content: "{{ item.vhost }}"
+    dest: "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}/index.html"
+    mode: "0644"
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+
+- name: Start the apache service
+  service:
+    name: "{{ apache_service }}"
+    state: started
+    enabled: yes

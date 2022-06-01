@@ -1,0 +1,31 @@
+<VirtualHost *:80>
+
+  ServerName {{ item.vhost }}
+  Redirect permanent / https://{{ item.vhost }}
+
+</VirtualHost>
+
+<VirtualHost {{ item.listen | default('*') }}:{{ item.port | default('443') }}>
+
+  ServerName {{ item.vhost }}
+{% if item.alias is defined %}
+  ServerAlias {{ item.alias }}
+{% endif %}
+  DocumentRoot {{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}
+  ErrorLog {{ item.errorlog | default(apache_vhostdir+'/'+item.vhost+'/log/error.log') }}
+  CustomLog {{ item.errorlog | default(apache_vhostdir+'/'+item.vhost+'/log/access.log') }} combined
+  SSLEngine on
+  SSLProtocol {{ apache_ssl_settings.SSLProtocol }}
+  SSLCipherSuite {{ apache_ssl_settings.SSLCipherSuite }}
+  SSLHonorCipherOrder {{ apache_ssl_settings.SSLHonorCipherOrder }}
+  SSLCertificateFile {{ item.ssl_crt }}
+  SSLCertificateKeyFile {{ item.ssl_key }}
+  SSLCertificateChainFile {{ item.ssl_chain }}
+
+</VirtualHost>
+{% if item.allow_override_all is defined and item.allow_override_all|bool %}
+
+<Directory "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost) }}">
+    AllowOverride All
+</Directory>
+{% endif %}

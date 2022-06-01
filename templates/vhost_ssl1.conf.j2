@@ -1,0 +1,31 @@
+<VirtualHost *:80>
+
+  ServerName {{ apache_vhost }}
+  Redirect permanent / https://{{ apache_vhost }}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+
+  ServerName {{ apache_vhost }}
+{% if apache_vhost_alias is defined %}
+  ServerAlias {{ apache_vhost_alias }}
+{% endif %}
+  DocumentRoot {{ apache_vhostdir }}/{{ apache_vhost }}
+  ErrorLog {{ apache_logdir }}/error_{{ apache_vhost }}.log
+  CustomLog {{ apache_logdir }}/access_{{ apache_vhost }}.log combined
+  SSLEngine on
+  SSLProtocol {{ apache_ssl_settings.SSLProtocol }}
+  SSLCipherSuite {{ apache_ssl_settings.SSLCipherSuite }}
+  SSLHonorCipherOrder {{ apache_ssl_settings.SSLHonorCipherOrder }}
+  SSLCertificateFile {{ apache_vhost_ssl_crt }}
+  SSLCertificateKeyFile {{ apache_vhost_ssl_key }}
+  SSLCertificateChainFile {{ apache_vhost_ssl_chain }}
+
+</VirtualHost>
+{% if apache_vhost_allow_override_all is defined and apache_vhost_allow_override_all|bool %}
+
+<Directory "{{ apache_vhostdir }}/{{ apache_vhost }}">
+    AllowOverride All
+</Directory>
+{% endif %}

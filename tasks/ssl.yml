@@ -1,0 +1,55 @@
+---
+
+- name: Include distro specific settings
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
+
+- name: Install all apache packages
+  package:
+    name: "{{ apache_packages }}"
+    state: present
+
+- name: Activate SSL using a2enmod
+  command: a2enmod ssl
+  register: _a2enmod_ssl
+  changed_when: "{{ _a2enmod_ssl.stdout is not search('Module ssl already enabled') }}"
+  when: ansible_os_family == 'Debian'
+
+- name: Configure SSL keys & certificates
+  replace:
+    path: '{{ apache_ssl_conf }}'
+    regexp: '^(#)?{{ item.key }} .*'
+    replace: '{{ item.key }} {{ item.value }}'
+  with_dict: "{{ apache_ssl_settings }}"
+  notify: Restart apache
+
+- name: Configure vhosts
+  template:
+    src: templates/vhost.conf.j2
+    dest: '{{ apache_conf_dir }}/{{ item.vhost }}.conf'
+    owner: root
+    group: root
+    mode: '0644'
+  with_items: "{{ apache_vhosts }}"
+  notify: Restart apache
+
+- name: Create vhost directories
+  file:
+    path: "{{ apache_vhostdir }}/{{ item.vhost }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items: "{{ vpache_hosts }}"
+  notify: Restart apache
+
+- name: Start the apache service
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items: "{{ apache_services }}"

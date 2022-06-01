@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+
+  ServerName {{ item.vhost }}
+{% if item.alias is defined %}
+  ServerAlias {{ item.alias }}
+{% endif %}
+  DocumentRoot {{ apache_vhostdir }}/{{ item.vhost }}
+  ErrorLog {{ apache_logdir }}/error_{{ item.vhost }}.log
+  CustomLog {{ apache_logdir }}/access_{{ item.vhost }}.log combined
+
+</VirtualHost>
+{% if item.allow_override_all is defined and item.allow_override_all|bool %}
+
+<Directory "{{ apache_vhostdir }}/{{ item.vhost }}">
+    AllowOverride All
+</Directory>
+{% endif %}

@@ -1,0 +1,43 @@
+<VirtualHost *:80>
+
+  ServerName {{ item.vhost }}
+  Redirect permanent / https://{{ item.vhost }}
+
+</VirtualHost>
+
+<VirtualHost {{ item.listen | default('*') }}:{{ item.port | default('443') }}>
+
+  ServerName {{ item.vhost }}
+{% if item.alias is defined %}
+  ServerAlias {{ item.alias }}
+{% endif %}
+  DocumentRoot {{ apache_vhostdir }}/{{ item.vhost }}
+  ErrorLog {{ apache_logdir }}/error_{{ item.vhost }}.log
+  CustomLog {{ apache_logdir }}/access_{{ item.vhost }}.log combined
+  SSLEngine on
+  SSLProtocol {{ apache_ssl_settings.SSLProtocol }}
+  SSLCipherSuite {{ apache_ssl_settings.SSLCipherSuite }}
+  SSLHonorCipherOrder {{ apache_ssl_settings.SSLHonorCipherOrder }}
+  SSLCertificateFile {{ item.ssl_crt }}
+  SSLCertificateKeyFile {{ item.ssl_key }}
+  SSLCertificateChainFile {{ item.ssl_chain }}
+
+  <Directory />
+    Options +Indexes +FollowSymLinks +ExecCGI
+    AllowOverride All
+    Order deny,allow
+    Allow from all
+    Require all granted
+  </Directory>
+
+  <Directory /admin/>
+    Order Allow,Deny
+    Deny from all
+  </Directory>
+
+  <Directory /data/>
+    Order Allow,Deny
+    Deny from all
+  </Directory>
+
+</VirtualHost>

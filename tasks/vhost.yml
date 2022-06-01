@@ -1,0 +1,30 @@
+---
+
+- name: Configure vhosts (w/ SSL)
+  template:
+    src: templates/vhost_ssl1.conf.j2
+    dest: '{{ apache_conf_dir }}/{{ apache_vhost }}.conf'
+    owner: root
+    group: root
+    mode: '0644'
+  when: apache_ssl|bool
+  notify: Restart apache
+ 
+- name: Configure vhosts (w/out SSL)
+  template:
+    src: templates/vhost_no_ssl.conf.j2
+    dest: '{{ apache_conf_dir }}/{{ apache_vhost }}.conf'
+    owner: root
+    group: root
+    mode: '0644'
+  when: not apache_ssl|bool
+  notify: Restart apache
+ 
+- name: Create vhost directories
+  file:
+    path: "{{ apache_vhost_dir|default(apache_vhostdir+'/'+apache_vhost) }}"
+    state: directory
+    owner: "{{ apache_vhost_owner | default('root') }}"
+    group: "{{ apache_vhost_group | default('root') }}"
+    mode: "{{ apache_vhost_mode | default('0755') }}"
+  notify: Restart apache
