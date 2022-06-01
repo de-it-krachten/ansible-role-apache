@@ -9,10 +9,10 @@ apache_vhosts: []
 
 # SSL/TLS keys
 apache_ssl: true
-apache_ssl_key: "{{ apache_ssl_priv_path }}/{{ apache_domain }}.key"
-apache_ssl_crt: "{{ apache_ssl_certs_path }}/{{ apache_domain }}.crt"
-apache_ssl_chain: "{{ apache_ssl_certs_path }}/{{ apache_domain }}.chain.crt"
-apache_ssl_fullchain: "{{ apache_ssl_certs_path }}/{{ apache_domain }}.fullchain.crt"
+apache_ssl_key: "{{ apache_ssl_priv_path }}/{{ apache_fqdn }}.key"
+apache_ssl_crt: "{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.crt"
+apache_ssl_chain: "{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.chain.crt"
+apache_ssl_fullchain: "{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.fullchain.crt"
 
 # SSL/TLS settings
 apache_ssl_settings:

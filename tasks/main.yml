@@ -94,16 +94,6 @@
       - "{{ item.vhost }}"
   notify: Restart apache
 
-- name: xxx
-  copy:
-    content: "{{ item.vhost }}"
-    dest: "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}/index.html"
-    mode: "0644"
-  loop: "{{ apache_vhosts }}"
-  loop_control:
-    label:
-      - "{{ item.vhost }}"
-
 - name: Start the apache service
   service:
     name: "{{ apache_service }}"

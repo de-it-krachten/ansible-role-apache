@@ -3,8 +3,56 @@
 
 - name: Verify
   hosts: all
-  gather_facts: false
+  gather_facts: true
+  vars_files:
+    - vars.yml
+  roles:
+    - openssl
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+
+    - name: Create basic index.html for testing
+      copy:
+        content: "{{ item.vhost }}"
+        dest: "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}/index.html"
+        mode: "0644"
+      loop: "{{ apache_vhosts }}"
+      loop_control:
+        label:
+          - "{{ item.vhost }}"
+          
+    - name: Put all hosts in /etc/hosts  # noqa no-changed-when
+      shell: |
+        echo "127.0.0.1 {{ item.vhost }}" >> /etc/hosts
+      become: yes
+      loop: "{{ apache_vhosts }}"
+      loop_control:
+        label:
+          - "{{ item.vhost }}"
+
+    - name: Retrieving index.html
+      get_url:
+        url: https://{{ item.vhost }}
+        dest: /tmp/{{ item.vhost }}.log
+        validate_certs: no
+      loop: "{{ apache_vhosts }}"
+      loop_control:
+        label:
+          - "{{ item.vhost }}"
+
+    - name: Read output
+      command: cat /tmp/{{ item.vhost }}.log
+      changed_when: no
+      register: _index_html
+      loop: "{{ apache_vhosts }}"
+      loop_control:
+        label:
+          - "{{ item.vhost }}"   
+
+    - name: Check content
+      fail:
+        msg: "Content not as expected!"
+      when: item.stdout != item.item.vhost
+      loop: "{{ _index_html.results }}"
+      loop_control:
+        label:
+          - "{{ item.item.vhost }}"
