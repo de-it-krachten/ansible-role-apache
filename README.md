@@ -12,14 +12,20 @@ Supported platforms
 
 - Red Hat Enterprise Linux 7<sup>1</sup>
 - Red Hat Enterprise Linux 8<sup>1</sup>
+- Red Hat Enterprise Linux 9<sup>1</sup>
 - CentOS 7
+- CentOS 8
 - RockyLinux 8
-- AlmaLinux 8<sup>1</sup>
+- OracleLinux 8
+- AlmaLinux 8
+- AlmaLinux 9
 - Debian 10 (Buster)
 - Debian 11 (Bullseye)
 - Ubuntu 18.04 LTS
 - Ubuntu 20.04 LTS
 - Ubuntu 22.04 LTS
+- Fedora 35
+- Fedora 36
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -114,8 +120,13 @@ apache_ssl_conf: "{{ apache_conf_dir }}/default-ssl.conf"
 <pre><code>
 - name: sample playbook for role 'apache'
   hosts: all
-  vars_files:
-    - vars.yml
+  vars:
+    openssl_fqdn: server.example.com
+    apache_fqdn: server.example.com
+    apache_ssl_key: "{{ openssl_server_key }}"
+    apache_ssl_crt: "{{ openssl_server_crt }}"
+    apache_ssl_chain: "{{ openssl_server_crt }}"
+    apache_vhosts: "[{'vhost': 'vhost1.example.com', 'alias': 'vhost1-alias.example.com', 'domain': 'vhost1.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}, {'vhost': 'vhost2.example.com', 'alias': 'vhost2-alias.example.com', 'domain': 'vhost2.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}]"
   pre_tasks:
     - name: Create 'remote_tmp'
       file:
