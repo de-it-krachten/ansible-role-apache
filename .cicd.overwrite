@@ -7,9 +7,6 @@ generic:
   role_description: |
     Manages apache webserver 
 
-github:
-  fail_fast: false
-
 molecule:
   converge:
     roles:
@@ -41,9 +38,6 @@ molecule:
           ssl_key: "{{ openssl_server_key }}"
           ssl_crt: "{{ openssl_server_crt }}"
           ssl_chain: "{{ openssl_server_crt }}"
-
-ci_templates:
-  requirements.yml:
-    force: false
-  verify.yml: 
-    force: false
+  requirements:
+    roles_extra:
+      - openssl
