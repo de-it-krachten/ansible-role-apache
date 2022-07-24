@@ -332,7 +332,7 @@ ci_templates:
   ansible-lint:
     src: molecule/templates/ansible-lint
     dest: .ansible-lint
-    force: no
+    # force: no
     when: molecule_active
   molecule-platforms.yml:
     src: molecule/templates/molecule-platforms.yml
