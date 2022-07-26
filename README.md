@@ -15,6 +15,7 @@ Supported platforms
 - Red Hat Enterprise Linux 9<sup>1</sup>
 - CentOS 7
 - RockyLinux 8
+- RockyLinux 9
 - OracleLinux 8
 - AlmaLinux 8
 - AlmaLinux 9
@@ -119,6 +120,7 @@ apache_ssl_conf: "{{ apache_conf_dir }}/default-ssl.conf"
 <pre><code>
 - name: sample playbook for role 'apache'
   hosts: all
+  become: "{{ molecule['converge']['become'] | default('yes') }}"
   vars:
     openssl_fqdn: server.example.com
     apache_fqdn: server.example.com
