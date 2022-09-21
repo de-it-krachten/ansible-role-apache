@@ -28,3 +28,9 @@
     group: "{{ apache_vhost_group | default('root') }}"
     mode: "{{ apache_vhost_mode | default('0755') }}"
   notify: Restart apache
+
+- name: Create test index.html
+  copy:
+    content: "{{ apache_vhost }}"
+    dest: "{{ apache_vhost_dir|default(apache_vhostdir+'/'+apache_vhost) }}/index.html"
+  when: apache_index_html is defined and apache_index_html|bool
