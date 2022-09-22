@@ -13,10 +13,14 @@ molecule:
       - openssl
     vars:
       openssl_fqdn: server.example.com
+      openssl_fqdn_additional:
+        - vhost1.example.com
+        - vhost2.example.com
       apache_fqdn: server.example.com
       apache_ssl_key: "{{ openssl_server_key }}"
       apache_ssl_crt: "{{ openssl_server_crt }}"
       apache_ssl_chain: "{{ openssl_server_crt }}"
+      apache_index_html: true
       apache_vhosts:
         - vhost: vhost1.example.com
           alias: vhost1-alias.example.com

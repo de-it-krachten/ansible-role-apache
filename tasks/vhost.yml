@@ -1,36 +1,43 @@
 ---
 
-- name: Configure vhosts (w/ SSL)
+- name: Distribute vhost configuration
   template:
-    src: templates/vhost_ssl1.conf.j2
-    dest: '{{ apache_conf_dir }}/{{ apache_vhost }}.conf'
+    src: "templates/{{ item.template }}"
+    dest: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
     owner: root
     group: root
-    mode: '0644'
-  when: apache_ssl|bool
+    mode: "0644"
   notify: Restart apache
- 
-- name: Configure vhosts (w/out SSL)
-  template:
-    src: templates/vhost_no_ssl.conf.j2
-    dest: '{{ apache_conf_dir }}/{{ apache_vhost }}.conf'
+
+- name: Activate vhosts
+  file:
+    src: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
+    dest: /etc/apache2/sites-enabled/{{ item.vhost }}.conf
     owner: root
     group: root
-    mode: '0644'
-  when: not apache_ssl|bool
+    state: link
   notify: Restart apache
+  when: ansible_os_family == 'Debian'
  
 - name: Create vhost directories
   file:
-    path: "{{ apache_vhost_dir|default(apache_vhostdir+'/'+apache_vhost) }}"
+    path: "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}"
     state: directory
-    owner: "{{ apache_vhost_owner | default('root') }}"
-    group: "{{ apache_vhost_group | default('root') }}"
-    mode: "{{ apache_vhost_mode | default('0755') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
   notify: Restart apache
 
+- name: Create vhosts log directory
+  file:
+    path: "{{ item.errorlog | default(apache_vhostdir+'/'+item.vhost+'/log/error.log') | dirname }}"
+    state: directory
+    mode: "0755"
+
 - name: Create test index.html
-  copy:
-    content: "{{ apache_vhost }}"
-    dest: "{{ apache_vhost_dir|default(apache_vhostdir+'/'+apache_vhost) }}/index.html"
+  template:
+    src: templates/vhost.index.html.j2
+    dest: "{{ apache_vhost_dir | default(apache_vhostdir + '/' + item.vhost) }}/public_html/index.html"
+    mode: "0644"
+    force: no
   when: apache_index_html is defined and apache_index_html|bool
