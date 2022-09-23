@@ -31,5 +31,5 @@ roles:
     scm: git
   - name: openssl
     src: https://github.com/de-it-krachten/ansible-role-openssl.git
-    version: dev
+    version: main
     scm: git
