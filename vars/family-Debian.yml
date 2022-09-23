@@ -21,3 +21,7 @@ apache_conf_dir: /etc/apache2/sites-available
 
 # Apache SSL configuration
 apache_ssl_conf: "{{ apache_conf_dir }}/default-ssl.conf"
+
+# Default user / group
+apache_user: www-data
+apache_group: www-data

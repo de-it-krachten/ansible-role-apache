@@ -16,7 +16,6 @@
     group: root
     mode: "0644"
   notify: Restart apache
-
 - name: Activate vhosts
   file:
     src: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
@@ -79,6 +78,8 @@
   template:
     src: templates/vhost.index.html.j2
     dest: "{{ vhost_docroot }}/index.html"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
     mode: "0644"
     force: no
   when: apache_index_html is defined and apache_index_html|bool

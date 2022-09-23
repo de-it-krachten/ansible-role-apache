@@ -46,6 +46,9 @@
     state: started
     enabled: yes
 
-- name: Set boolean so we know which webserver is used
+- name: Set some variables for other roles to use
   set_fact:
     webserver_in_use: apache
+    webserver_service: "{{ apache_service }}"
+    webserver_user: "{{ apache_user }}"
+    webserver_group: "{{ apache_group }}"
