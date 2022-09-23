@@ -11,21 +11,21 @@
 {% if item.alias is defined %}
   ServerAlias {{ item.alias }}
 {% endif %}
-  DocumentRoot {{ item.docroot | default(apache_vhostdir+'/'+item.vhost+'/public_html') }}
-  ErrorLog {{ item.errorlog | default(apache_vhostdir+'/'+item.vhost+'/log/error.log') }}
-  CustomLog {{ item.errorlog | default(apache_vhostdir+'/'+item.vhost+'/log/access.log') }} combined
+  DocumentRoot {{ vhost_docroot }}
+  ErrorLog {{ vhost_errorlog }}
+  CustomLog {{ vhost_customlog }} combined
   SSLEngine on
   SSLProtocol {{ apache_ssl_settings.SSLProtocol }}
   SSLCipherSuite {{ apache_ssl_settings.SSLCipherSuite }}
   SSLHonorCipherOrder {{ apache_ssl_settings.SSLHonorCipherOrder }}
-  SSLCertificateFile {{ item.ssl_crt }}
-  SSLCertificateKeyFile {{ item.ssl_key }}
-  SSLCertificateChainFile {{ item.ssl_chain }}
+  SSLCertificateFile {{ vhost_sslpath }}/{{ item.vhost }}.crt
+  SSLCertificateKeyFile {{ vhost_sslpath }}/{{ item.vhost }}.key
+  SSLCertificateChainFile {{ vhost_sslpath }}/{{ item.vhost }}.chain
 
 </VirtualHost>
 {% if item.allow_override_all is defined and item.allow_override_all|bool %}
 
-<Directory "{{ item.docroot | default(apache_vhostdir+'/'+item.vhost) }}">
+<Directory "{{ vhost_docroot }}">
     AllowOverride All
 </Directory>
 {% endif %}

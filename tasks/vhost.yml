@@ -1,30 +1,84 @@
 ---
 
-- name: Configure vhosts (w/ SSL)
+- name: Define vhost specific variables
+  set_fact:
+    vhost_docroot: "{{ item.docroot | default(apache_vhostdir + '/' + item.vhost + '/public_html') }}"
+    vhost_sslpath: "{{ item.sslpath | default(apache_vhostdir + '/' + item.vhost + '/ssl') }}"
+    vhost_logpath: "{{ item.logpath | default(apache_vhostdir + '/' + item.vhost + '/log') }}"
+    vhost_errorlog: "{{ item.errorlog | default(apache_vhostdir + '/' + item.vhost + '/log/error.log') }}"
+    vhost_customlog: "{{ item.customlog | default(apache_vhostdir + '/' + item.vhost + '/log/access.log') }}"
+
+- name: Distribute vhost configuration
   template:
-    src: templates/vhost_ssl1.conf.j2
-    dest: '{{ apache_conf_dir }}/{{ apache_vhost }}.conf'
+    src: "templates/{{ item.template }}"
+    dest: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
     owner: root
     group: root
-    mode: '0644'
-  when: apache_ssl|bool
+    mode: "0644"
   notify: Restart apache
- 
-- name: Configure vhosts (w/out SSL)
-  template:
-    src: templates/vhost_no_ssl.conf.j2
-    dest: '{{ apache_conf_dir }}/{{ apache_vhost }}.conf'
+
+- name: Activate vhosts
+  file:
+    src: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
+    dest: /etc/apache2/sites-enabled/{{ item.vhost }}.conf
     owner: root
     group: root
-    mode: '0644'
-  when: not apache_ssl|bool
+    state: link
   notify: Restart apache
+  when: ansible_os_family == 'Debian'
  
 - name: Create vhost directories
   file:
-    path: "{{ apache_vhost_dir|default(apache_vhostdir+'/'+apache_vhost) }}"
+    path: "{{ vhost_dir }}"
     state: directory
-    owner: "{{ apache_vhost_owner | default('root') }}"
-    group: "{{ apache_vhost_group | default('root') }}"
-    mode: "{{ apache_vhost_mode | default('0755') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
   notify: Restart apache
+  loop:
+    - "{{ vhost_docroot }}"
+    - "{{ vhost_sslpath }}"
+    - "{{ vhost_logpath }}"
+  loop_control:
+    loop_var: vhost_dir
+
+- name: Provision SSL private key
+  copy:
+    src: "{{ item.ssl_key }}"
+    dest: "{{ vhost_sslpath }}/{{ item.vhost }}.key"
+    owner: root
+    group: root
+    mode: "0600"
+    remote_src: "{{ True if item.ssl_key is search('^/') else False }}"
+  notify: Restart apache
+  when: item.ssl_key is defined
+
+- name: Provision SSL certificates
+  copy:
+    src: "{{ item.ssl_crt }}"
+    dest: "{{ vhost_sslpath }}/{{ item.vhost }}.crt"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: "{{ True if item.ssl_crt is search('^/') else False }}"
+  notify: Restart apache
+  when: item.ssl_crt is defined
+
+- name: Provision SSL certificate chain
+  copy:
+    src: "{{ item.ssl_chain }}"
+    dest: "{{ vhost_sslpath }}/{{ item.vhost }}.chain"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: "{{ True if item.ssl_chain is search('^/') else False }}"
+  notify: Restart apache
+  when: item.ssl_chain is defined
+
+- name: Create test index.html
+  template:
+    src: templates/vhost.index.html.j2
+    dest: "{{ vhost_docroot }}/index.html"
+    mode: "0644"
+    force: no
+  when: apache_index_html is defined and apache_index_html|bool
