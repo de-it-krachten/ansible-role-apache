@@ -1,0 +1,70 @@
+---
+
+- name: SSL configuration on Debian
+  block:
+
+    - name: Configure SSL
+      template:
+        src: templates/ssl-params.conf.j2
+        dest: /etc/apache2/conf-available/ssl-params.conf
+        mode: "0644"
+      notify: Restart apache
+
+    - name: Activate modules
+      command: a2enmod {{ item }}
+      register: _a2enmod
+      changed_when: "_a2enmod.stdout is not search('Module ' + item + ' already enabled')"
+      loop:
+        - ssl
+        - headers
+      notify: Restart apache
+
+    - name: Activate sites
+      command: a2ensite {{ item }}
+      register: _a2ensite
+      changed_when: "_a2ensite.stdout is not search('Site ' + item + ' already enabled')"
+      loop:
+        - default-ssl
+      notify: Restart apache
+
+    - name: Activate Confs
+      command: a2enconf {{ item }}
+      register: _a2enconf
+      changed_when: "_a2enconf.stdout is not search('Conf ' + item + ' already enabled')"
+      loop:
+        - ssl-params
+      notify: Restart apache
+
+    - name: Configure SSL keys & certificates
+      replace:
+        path: '{{ apache_ssl_conf }}'
+        regexp: '^(\s*)(#)?{{ item.key }}(\s*).*'
+        replace: '\1{{ item.key }}\3{{ item.value }}'
+      loop: "{{ apache_ssl_settings | dict2items }}"
+      when: apache_ssl|bool
+      notify: Restart apache
+
+  when: ansible_os_family == 'Debian'
+
+- name: SSL configuration on RedHat
+  block:
+
+    - name: Configure SSL keys & certificates
+      replace:
+        path: '{{ apache_ssl_conf }}'
+        regexp: '^(#)?{{ item.key }}(\s*).*'
+        replace: '{{ item.key }} {{ item.value }}'
+      loop: "{{ apache_ssl_settings | dict2items }}"
+      when: apache_ssl|bool
+      notify: Restart apache
+
+  when: ansible_os_family == 'RedHat'
+
+- name: Create test index.html
+  template:
+    src: templates/main.index.html.j2
+    dest: "{{ apache_wwwdir }}/html/index.html"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "0644"
+  when: apache_index_html is defined and apache_index_html|bool

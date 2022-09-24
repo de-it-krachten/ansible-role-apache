@@ -16,6 +16,7 @@
     group: root
     mode: "0644"
   notify: Restart apache
+
 - name: Activate vhosts
   file:
     src: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"

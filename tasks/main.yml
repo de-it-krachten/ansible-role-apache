@@ -13,38 +13,21 @@
       paths:
         - "vars"
 
-- name: Install all apache packages
-  package:
-    name: "{{ apache_packages }}"
-    state: present
+# Install apache
+- name: Install apache
+  include_tasks: install.yml
 
-- name: Activate SSL using a2enmod
-  command: a2enmod ssl
-  register: _a2enmod_ssl
-  changed_when: "_a2enmod_ssl.stdout is not search('Module ssl already enabled')"
-  when: ansible_os_family == 'Debian'
+# Config apache
+- name: Config apache
+  include_tasks: config.yml
 
-- name: Configure SSL keys & certificates
-  replace:
-    path: '{{ apache_ssl_conf }}'
-    regexp: '^(#)?{{ item.key }} .*'
-    replace: '{{ item.key }} {{ item.value }}'
-  loop: "{{ apache_ssl_settings | dict2items }}"
-  when: apache_ssl|bool
-  notify: Restart apache
-
+# vhosts
 - name: Configure vhosts
   include_tasks: vhost.yml
   loop: "{{ apache_vhosts }}"
   loop_control:
     label:
       - "{{ item.vhost }}"
-
-- name: Start the apache service
-  service:
-    name: "{{ apache_service }}"
-    state: started
-    enabled: yes
 
 - name: Set some variables for other roles to use
   set_fact:
