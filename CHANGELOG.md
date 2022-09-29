@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.1.1...v1.2.0) (2022-09-29)
+
+
+### Bug Fixes
+
+* Fix directory permissions ([1494b69](https://github.com/de-it-krachten/ansible-role-apache/commit/1494b69ae164b61f4450637f86f27d1fe01e6511))
+
+
+### Features
+
+* Introduction of platform defaults ([c72ba64](https://github.com/de-it-krachten/ansible-role-apache/commit/c72ba645b706f5f2fbf1d43f6322014a7c4f0b25))
+
 ## [1.1.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.1.0...v1.1.1) (2022-09-25)
 
 
