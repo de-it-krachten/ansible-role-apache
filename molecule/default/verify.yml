@@ -34,6 +34,7 @@
         url: https://{{ item.vhost }}
         dest: /tmp/{{ item.vhost }}.log
         validate_certs: no
+        mode: "0644"
       loop: "{{ apache_vhosts }}"
       loop_control:
         label:

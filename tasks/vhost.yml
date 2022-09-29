@@ -27,20 +27,32 @@
   notify: Restart apache
   when: ansible_os_family == 'Debian'
  
-- name: Create vhost directories
+- name: Create 'public_html' directory
   file:
-    path: "{{ vhost_dir }}"
+    path: "{{ vhost_docroot }}"
     state: directory
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0755') }}"
   notify: Restart apache
-  loop:
-    - "{{ vhost_docroot }}"
-    - "{{ vhost_sslpath }}"
-    - "{{ vhost_logpath }}"
-  loop_control:
-    loop_var: vhost_dir
+
+- name: Create 'ssl' directory
+  file:
+    path: "{{ vhost_sslpath }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0750"
+  notify: Restart apache
+
+- name: Create 'log' directory
+  file:
+    path: "{{ vhost_logpath }}"
+    state: directory
+    owner: "root"
+    group: "{{ item.group | default('root') }}"
+    mode: "0750"
+  notify: Restart apache
 
 - name: Provision SSL private key
   copy:

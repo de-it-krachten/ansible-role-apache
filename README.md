@@ -63,56 +63,6 @@ apache_fw_ports:
   - { port: 443, proto: tcp }
 </pre></code>
 
-### vars/family-RedHat.yml
-<pre><code>
-# SSL private + certificate store
-apache_ssl_certs_path: /etc/pki/tls/certs
-apache_ssl_priv_path: /etc/pki/tls/private
- 
-# Packages required
-apache_packages:
-  - httpd
-  - mod_ssl
-  - openssl
-
-# log directory
-apache_logdir: /var/log/httpd
- 
-# Apache service
-apache_service: httpd
- 
-# Apache configuration directory
-apache_conf_dir: /etc/httpd/conf.d
- 
-# Apache SSL configuration
-apache_ssl_conf: "{{ apache_conf_dir }}/ssl.conf"
-</pre></code>
-
-### vars/family-Debian.yml
-<pre><code>
-# SSL private + certificate store
-apache_ssl_certs_path: /etc/pki/tls/certs
-apache_ssl_priv_path: /etc/pki/tls/private
-
-# Packages required
-apache_packages:
-  - apache2
-  - apache2-utils
-  - openssl
-
-# log directory
-apache_logdir: /var/log/apache2
-
-# Apache service
-apache_service: apache2
-
-# Apache configuration directory
-apache_conf_dir: /etc/apache2/sites-available
-
-# Apache SSL configuration
-apache_ssl_conf: "{{ apache_conf_dir }}/default-ssl.conf"
-</pre></code>
-
 
 
 ## Example Playbook
