@@ -14,7 +14,7 @@
     - "defaults/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
   when: item in var_list
 
-- name: Set variable if not already defined
+- name: Set variable if not already defined  # noqa var-naming
   set_fact:
     "{{ item.key }}": "{{ item.value }}"
   when: vars[item.key] is undefined
