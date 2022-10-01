@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.2.0...v1.2.1) (2022-10-01)
+
+
+### Bug Fixes
+
+* Fix linting issues ([c39cecb](https://github.com/de-it-krachten/ansible-role-apache/commit/c39cecbe5d0cc2284c233fef7820566b37afc1f7))
+
 # [1.2.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.1.1...v1.2.0) (2022-09-29)
 
 
