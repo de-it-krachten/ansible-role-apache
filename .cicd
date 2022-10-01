@@ -431,9 +431,7 @@ ci_templates:
 # Ansible-lint
 ansible_lint:
   exclude_paths:
-    - molecule/default/ansible-lint.yml
-    - molecule/default/molecule-test.yml
-    - molecule/default/vars.yml
+    - molecule/
   skip_list:
     - fqcn-builtins
     - var-spacing

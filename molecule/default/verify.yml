@@ -19,7 +19,7 @@
       loop_control:
         label:
           - "{{ item.vhost }}"
-          
+
     - name: Put all hosts in /etc/hosts  # noqa no-changed-when
       shell: |
         echo "127.0.0.1 {{ item.vhost }}" >> /etc/hosts
@@ -47,7 +47,7 @@
       loop: "{{ apache_vhosts }}"
       loop_control:
         label:
-          - "{{ item.vhost }}"   
+          - "{{ item.vhost }}"
 
     - name: Check content
       fail:

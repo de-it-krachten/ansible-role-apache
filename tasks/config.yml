@@ -1,6 +1,7 @@
 ---
 
 - name: SSL configuration on Debian
+  when: ansible_os_family == 'Debian'
   block:
 
     - name: Configure SSL
@@ -44,9 +45,8 @@
       when: apache_ssl|bool
       notify: Restart apache
 
-  when: ansible_os_family == 'Debian'
-
 - name: SSL configuration on RedHat
+  when: ansible_os_family == 'RedHat'
   block:
 
     - name: Configure SSL keys & certificates
@@ -57,8 +57,6 @@
       loop: "{{ apache_ssl_settings | dict2items }}"
       when: apache_ssl|bool
       notify: Restart apache
-
-  when: ansible_os_family == 'RedHat'
 
 - name: Create test index.html
   template:
