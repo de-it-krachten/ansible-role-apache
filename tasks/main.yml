@@ -2,26 +2,26 @@
 
 # Load OS specific vars
 - name: Load variables based on OS type
-  include_tasks: vars.yml
+  ansible.builtin.include_tasks: vars.yml
 
 # Install apache
 - name: Install apache
-  include_tasks: install.yml
+  ansible.builtin.include_tasks: install.yml
 
 # Config apache
 - name: Config apache
-  include_tasks: config.yml
+  ansible.builtin.include_tasks: config.yml
 
 # vhosts
 - name: Configure vhosts
-  include_tasks: vhost.yml
+  ansible.builtin.include_tasks: vhost.yml
   loop: "{{ apache_vhosts }}"
   loop_control:
     label:
       - "{{ item.vhost }}"
 
 - name: Set some variables for other roles to use
-  set_fact:
+  ansible.builtin.set_fact:
     webserver_in_use: apache
     webserver_service: "{{ apache_service }}"
     webserver_user: "{{ apache_user }}"

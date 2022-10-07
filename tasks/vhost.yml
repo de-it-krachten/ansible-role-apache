@@ -1,7 +1,7 @@
 ---
 
 - name: Define vhost specific variables
-  set_fact:
+  ansible.builtin.set_fact:
     vhost_docroot: "{{ item.docroot | default(apache_vhostdir + '/' + item.vhost + '/public_html') }}"
     vhost_sslpath: "{{ item.sslpath | default(apache_vhostdir + '/' + item.vhost + '/ssl') }}"
     vhost_logpath: "{{ item.logpath | default(apache_vhostdir + '/' + item.vhost + '/log') }}"
@@ -9,7 +9,7 @@
     vhost_customlog: "{{ item.customlog | default(apache_vhostdir + '/' + item.vhost + '/log/access.log') }}"
 
 - name: Distribute vhost configuration
-  template:
+  ansible.builtin.template:
     src: "templates/{{ item.template }}"
     dest: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
     owner: root
@@ -18,7 +18,7 @@
   notify: Restart apache
 
 - name: Activate vhosts
-  file:
+  ansible.builtin.file:
     src: "{{ apache_conf_dir }}/{{ item.vhost }}.conf"
     dest: /etc/apache2/sites-enabled/{{ item.vhost }}.conf
     owner: root
@@ -28,7 +28,7 @@
   when: ansible_os_family == 'Debian'
 
 - name: Create 'public_html' directory
-  file:
+  ansible.builtin.file:
     path: "{{ vhost_docroot }}"
     state: directory
     owner: "{{ item.owner | default('root') }}"
@@ -37,7 +37,7 @@
   notify: Restart apache
 
 - name: Create 'ssl' directory
-  file:
+  ansible.builtin.file:
     path: "{{ vhost_sslpath }}"
     state: directory
     owner: "root"
@@ -46,7 +46,7 @@
   notify: Restart apache
 
 - name: Create 'log' directory
-  file:
+  ansible.builtin.file:
     path: "{{ vhost_logpath }}"
     state: directory
     owner: "root"
@@ -55,7 +55,7 @@
   notify: Restart apache
 
 - name: Provision SSL private key
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.ssl_key }}"
     dest: "{{ vhost_sslpath }}/{{ item.vhost }}.key"
     owner: root
@@ -66,7 +66,7 @@
   when: item.ssl_key is defined
 
 - name: Provision SSL certificates
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.ssl_crt }}"
     dest: "{{ vhost_sslpath }}/{{ item.vhost }}.crt"
     owner: root
@@ -77,7 +77,7 @@
   when: item.ssl_crt is defined
 
 - name: Provision SSL certificate chain
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.ssl_chain }}"
     dest: "{{ vhost_sslpath }}/{{ item.vhost }}.chain"
     owner: root
@@ -88,7 +88,7 @@
   when: item.ssl_chain is defined
 
 - name: Create test index.html
-  template:
+  ansible.builtin.template:
     src: templates/vhost.index.html.j2
     dest: "{{ vhost_docroot }}/index.html"
     owner: "{{ item.owner | default('root') }}"
