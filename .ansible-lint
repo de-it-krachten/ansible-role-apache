@@ -3,6 +3,3 @@
 exclude_paths:
   - molecule/
 
-skip_list:
-  - fqcn-builtins
-  - var-spacing

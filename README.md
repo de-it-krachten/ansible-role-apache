@@ -6,6 +6,15 @@
 Manages apache webserver 
 
 
+
+## Dependencies
+
+#### Roles
+None
+
+#### Collections
+- community.general
+
 ## Platforms
 
 Supported platforms
@@ -141,7 +150,7 @@ apache_group: www-data
     apache_vhosts: "[{'vhost': 'vhost1.example.com', 'alias': 'vhost1-alias.example.com', 'domain': 'vhost1.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': 'files/vhost1.example.com.key', 'ssl_crt': 'files/vhost1.example.com.crt', 'ssl_chain': 'files/vhost1.example.com.crt'}, {'vhost': 'vhost2.example.com', 'alias': 'vhost2-alias.example.com', 'domain': 'vhost2.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}]"
   pre_tasks:
     - name: Create 'remote_tmp'
-      file:
+      ansible.builtin.file:
         path: /root/.ansible/tmp
         state: directory
         mode: "0700"
@@ -149,6 +158,6 @@ apache_group: www-data
     - openssl
   tasks:
     - name: Include role 'apache'
-      include_role:
+      ansible.builtin.include_role:
         name: apache
 </pre></code>

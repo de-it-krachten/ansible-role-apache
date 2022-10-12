@@ -5,14 +5,14 @@
   block:
 
     - name: Configure SSL
-      template:
+      ansible.builtin.template:
         src: templates/ssl-params.conf.j2
         dest: /etc/apache2/conf-available/ssl-params.conf
         mode: "0644"
       notify: Restart apache
 
     - name: Activate modules
-      command: a2enmod {{ item }}
+      ansible.builtin.command: a2enmod {{ item }}
       register: _a2enmod
       changed_when: "_a2enmod.stdout is not search('Module ' + item + ' already enabled')"
       loop:
@@ -21,7 +21,7 @@
       notify: Restart apache
 
     - name: Activate sites
-      command: a2ensite {{ item }}
+      ansible.builtin.command: a2ensite {{ item }}
       register: _a2ensite
       changed_when: "_a2ensite.stdout is not search('Site ' + item + ' already enabled')"
       loop:
@@ -29,7 +29,7 @@
       notify: Restart apache
 
     - name: Activate Confs
-      command: a2enconf {{ item }}
+      ansible.builtin.command: a2enconf {{ item }}
       register: _a2enconf
       changed_when: "_a2enconf.stdout is not search('Conf ' + item + ' already enabled')"
       loop:
@@ -37,7 +37,7 @@
       notify: Restart apache
 
     - name: Configure SSL keys & certificates
-      replace:
+      ansible.builtin.replace:
         path: '{{ apache_ssl_conf }}'
         regexp: '^(\s*)(#)?{{ item.key }}(\s*).*'
         replace: '\1{{ item.key }}\3{{ item.value }}'
@@ -50,7 +50,7 @@
   block:
 
     - name: Configure SSL keys & certificates
-      replace:
+      ansible.builtin.replace:
         path: '{{ apache_ssl_conf }}'
         regexp: '^(#)?{{ item.key }}(\s*).*'
         replace: '{{ item.key }} {{ item.value }}'
@@ -59,7 +59,7 @@
       notify: Restart apache
 
 - name: Create test index.html
-  template:
+  ansible.builtin.template:
     src: templates/main.index.html.j2
     dest: "{{ apache_wwwdir }}/html/index.html"
     owner: "{{ item.owner | default('root') }}"
