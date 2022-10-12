@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.2.1...v1.3.0) (2022-10-12)
+
+
+### Features
+
+* Move to FQCN ([f575812](https://github.com/de-it-krachten/ansible-role-apache/commit/f5758121fcfd91490211095438a1fd23cae2c642))
+* Update CI to latest standards ([cd672d4](https://github.com/de-it-krachten/ansible-role-apache/commit/cd672d487caf88816cdff6cbc9ab76e42bbc7620))
+
 ## [1.2.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.2.0...v1.2.1) (2022-10-01)
 
 
