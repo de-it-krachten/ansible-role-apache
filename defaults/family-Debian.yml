@@ -1,8 +1,8 @@
 ---
 
 # SSL private + certificate store
-apache_ssl_certs_path: /etc/pki/tls/certs
-apache_ssl_priv_path: /etc/pki/tls/private
+apache_ssl_certs_path: /etc/ssl/certs
+apache_ssl_priv_path: /etc/ssl/private
 
 # Packages required
 apache_packages:
