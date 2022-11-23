@@ -54,45 +54,50 @@
     mode: "0750"
   notify: Restart apache
 
-- name: Provision SSL private key
-  ansible.builtin.copy:
-    src: "{{ item.ssl_key }}"
-    dest: "{{ vhost_sslpath }}/{{ item.vhost }}.key"
-    owner: root
-    group: root
-    mode: "0600"
-    remote_src: "{{ True if item.ssl_key is search('^/') else False }}"
-  notify: Restart apache
-  when: item.ssl_key is defined
+- name: Copy SSL keys
+  when: item.ssl_copy is defined and item.ssl_copy | bool
+  block:
 
-- name: Provision SSL certificates
-  ansible.builtin.copy:
-    src: "{{ item.ssl_crt }}"
-    dest: "{{ vhost_sslpath }}/{{ item.vhost }}.crt"
-    owner: root
-    group: root
-    mode: "0644"
-    remote_src: "{{ True if item.ssl_crt is search('^/') else False }}"
-  notify: Restart apache
-  when: item.ssl_crt is defined
+    - name: Provision SSL private key
+      ansible.builtin.copy:
+        src: "{{ item.ssl_key }}"
+        dest: "{{ vhost_sslpath }}/{{ item.vhost }}.key"
+        owner: root
+        group: root
+        mode: "0600"
+        remote_src: "{{ True if item.ssl_key is search('^/') else False }}"
+      notify: Restart apache
+      when: item.ssl_key is defined
 
-- name: Provision SSL certificate chain
-  ansible.builtin.copy:
-    src: "{{ item.ssl_chain }}"
-    dest: "{{ vhost_sslpath }}/{{ item.vhost }}.chain"
-    owner: root
-    group: root
-    mode: "0644"
-    remote_src: "{{ True if item.ssl_chain is search('^/') else False }}"
-  notify: Restart apache
-  when: item.ssl_chain is defined
+    - name: Provision SSL certificates
+      ansible.builtin.copy:
+        src: "{{ item.ssl_crt }}"
+        dest: "{{ vhost_sslpath }}/{{ item.vhost }}.crt"
+        owner: root
+        group: root
+        mode: "0644"
+        remote_src: "{{ True if item.ssl_crt is search('^/') else False }}"
+      notify: Restart apache
+      when: item.ssl_crt is defined
+
+    - name: Provision SSL certificate chain
+      ansible.builtin.copy:
+        src: "{{ item.ssl_chain }}"
+        dest: "{{ vhost_sslpath }}/{{ item.vhost }}.chain"
+        owner: root
+        group: root
+        mode: "0644"
+        remote_src: "{{ True if item.ssl_chain is search('^/') else False }}"
+      notify: Restart apache
+      when: item.ssl_chain is defined
 
 - name: Create test index.html
   ansible.builtin.template:
-    src: templates/vhost.index.html.j2
+    src: "{{ item.index_html_template | default('templates/vhost.index.html.j2') }}"
     dest: "{{ vhost_docroot }}/index.html"
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
     mode: "0644"
     force: no
-  when: apache_index_html is defined and apache_index_html|bool
+  # when: apache_index_html is defined and apache_index_html|bool
+  when: item.index_html is defined and item.index_html | bool
