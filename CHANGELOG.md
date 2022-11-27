@@ -1,3 +1,11 @@
+## [1.3.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.3.0...v1.3.1) (2022-11-27)
+
+
+### Bug Fixes
+
+* Add ssl_copy boolean for vhosts ([1adf71d](https://github.com/de-it-krachten/ansible-role-apache/commit/1adf71d17034f7c7071b139bf46fcf608a7e063a))
+* Put SSL location into the correct '/etc/ssl' for Debian family ([d56dff4](https://github.com/de-it-krachten/ansible-role-apache/commit/d56dff4244383b0780d97289e092af760553ed52))
+
 # [1.3.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.2.1...v1.3.0) (2022-10-12)
 
 
