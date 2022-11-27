@@ -58,12 +58,6 @@
           {{ (ansible_distribution | lower) + ansible_distribution_major_version }}
           {%- endif -%}
 
-    - name: Show python information
-      ansible.builtin.debug:
-        msg:
-          "ansible_python_version": "{{ ansible_python_version }}"
-          "ansible_python_executable": "{{ ansible_python['executable'] }}"
-
     - name: Show settings
       ansible.builtin.debug:
         msg:
