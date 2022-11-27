@@ -35,8 +35,10 @@
       - rocky9
       - almalinux8
       - almalinux9
-
     systemctl_alternative: False
+  roles:
+    - showinfo
+    - facts
   tasks:
 
     - name: Create remote_tmp
@@ -56,6 +58,12 @@
           {{ (ansible_distribution | lower) + ansible_distribution_major_version }}
           {%- endif -%}
 
+    - name: Show python information
+      ansible.builtin.debug:
+        msg:
+          "ansible_python_version": "{{ ansible_python_version }}"
+          "ansible_python_executable": "{{ ansible_python['executable'] }}"
+
     - name: Show settings
       ansible.builtin.debug:
         msg:
@@ -67,6 +75,7 @@
           no_proxy: "{{ no_proxy }}"
           prepare_firewall: "{{ prepare_firewall | default(False) }}"
           update_all: "{{ update_all | default(False) }}"
+          activate_epel: "{{ activate_epel | default(False) }}"
 
     - name: Enable root access
       when:

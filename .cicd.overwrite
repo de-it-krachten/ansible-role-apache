@@ -29,6 +29,7 @@ molecule:
           listen: '*'
           port: '443'
           ssl: yes
+          ssl_copy: true
           ssl_key: files/vhost1.example.com.key
           ssl_crt: files/vhost1.example.com.crt
           ssl_chain: files/vhost1.example.com.crt
@@ -39,6 +40,7 @@ molecule:
           listen: '*'
           port: '443'
           ssl: yes
+          ssl_copy: true
           ssl_key: "{{ openssl_server_key }}"
           ssl_crt: "{{ openssl_server_crt }}"
           ssl_chain: "{{ openssl_server_crt }}"

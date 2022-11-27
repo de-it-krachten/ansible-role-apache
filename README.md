@@ -26,6 +26,7 @@ Supported platforms
 - RockyLinux 8
 - RockyLinux 9
 - OracleLinux 8
+- OracleLinux 9
 - AlmaLinux 8
 - AlmaLinux 9
 - Debian 10 (Buster)
@@ -104,8 +105,8 @@ apache_group: apache
 ### defaults/family-Debian.yml
 <pre><code>
 # SSL private + certificate store
-apache_ssl_certs_path: /etc/pki/tls/certs
-apache_ssl_priv_path: /etc/pki/tls/private
+apache_ssl_certs_path: /etc/ssl/certs
+apache_ssl_priv_path: /etc/ssl/private
 
 # Packages required
 apache_packages:
@@ -138,7 +139,7 @@ apache_group: www-data
 <pre><code>
 - name: sample playbook for role 'apache'
   hosts: all
-  become: "{{ molecule['converge']['become'] | default('yes') }}"
+  become: "yes"
   vars:
     openssl_fqdn: server.example.com
     openssl_fqdn_additional: ['vhost1.example.com', 'vhost2.example.com']
@@ -147,13 +148,7 @@ apache_group: www-data
     apache_ssl_crt: "{{ openssl_server_crt }}"
     apache_ssl_chain: "{{ openssl_server_crt }}"
     apache_index_html: True
-    apache_vhosts: "[{'vhost': 'vhost1.example.com', 'alias': 'vhost1-alias.example.com', 'domain': 'vhost1.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': 'files/vhost1.example.com.key', 'ssl_crt': 'files/vhost1.example.com.crt', 'ssl_chain': 'files/vhost1.example.com.crt'}, {'vhost': 'vhost2.example.com', 'alias': 'vhost2-alias.example.com', 'domain': 'vhost2.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}]"
-  pre_tasks:
-    - name: Create 'remote_tmp'
-      ansible.builtin.file:
-        path: /root/.ansible/tmp
-        state: directory
-        mode: "0700"
+    apache_vhosts: "[{'vhost': 'vhost1.example.com', 'alias': 'vhost1-alias.example.com', 'domain': 'vhost1.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_copy': True, 'ssl_key': 'files/vhost1.example.com.key', 'ssl_crt': 'files/vhost1.example.com.crt', 'ssl_chain': 'files/vhost1.example.com.crt'}, {'vhost': 'vhost2.example.com', 'alias': 'vhost2-alias.example.com', 'domain': 'vhost2.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_copy': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}'}]"
   roles:
     - openssl
   tasks:
