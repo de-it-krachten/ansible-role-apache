@@ -10,7 +10,7 @@ generic:
 molecule:
   converge:
     roles:
-      - openssl
+      - deitkrachten.openssl
     vars:
       openssl_fqdn: server.example.com
       openssl_fqdn_additional:
@@ -46,4 +46,4 @@ molecule:
           ssl_chain: "{{ openssl_server_crt }}"
   requirements:
     roles_extra:
-      - openssl
+      - deitkrachten.openssl
