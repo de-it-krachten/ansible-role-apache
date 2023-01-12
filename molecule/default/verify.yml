@@ -7,7 +7,7 @@
   vars_files:
     - vars.yml
   roles:
-    - openssl
+    - deitkrachten.openssl
   tasks:
 
     - name: Create basic index.html for testing
