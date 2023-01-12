@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.3.1...v1.4.0) (2023-01-12)
+
+
+### Features
+
+* Update CI/README/Platforms ([4b636a0](https://github.com/de-it-krachten/ansible-role-apache/commit/4b636a0465099d4e0779271517171349f1aa1873))
+
 ## [1.3.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.3.0...v1.3.1) (2022-11-27)
 
 
