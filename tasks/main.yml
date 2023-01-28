@@ -1,28 +1,23 @@
 ---
 
-# Load OS specific vars
-- name: Load variables based on OS type
-  ansible.builtin.include_tasks: vars.yml
-
-# Install apache
-- name: Install apache
-  ansible.builtin.include_tasks: install.yml
-
-# Config apache
-- name: Config apache
-  ansible.builtin.include_tasks: config.yml
-
-# vhosts
-- name: Configure vhosts
-  ansible.builtin.include_tasks: vhost.yml
-  loop: "{{ apache_vhosts }}"
-  loop_control:
-    label:
-      - "{{ item.vhost }}"
-
-- name: Set some variables for other roles to use
+- name: Define defaults to use based on OS type
   ansible.builtin.set_fact:
-    webserver_in_use: apache
-    webserver_service: "{{ apache_service }}"
-    webserver_user: "{{ apache_user }}"
-    webserver_group: "{{ apache_group }}"
+    defaults: "{{ lookup('first_found', params) | basename }}"
+  vars:
+    params:
+      files:
+        - "defaults/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "defaults/{{ ansible_distribution }}.yml"
+        - "defaults/family-{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+        - "defaults/family-{{ ansible_os_family }}.yml"
+        - "defaults/main.yml"
+
+- name: Show defaults selected
+  ansible.builtin.debug:
+    var: defaults
+
+- name: Execute role again using selected defaults
+  ansible.builtin.include_role:
+    name: "{{ role_name }}"
+    defaults_from: "{{ defaults }}"
+    tasks_from: "main1.yml"
