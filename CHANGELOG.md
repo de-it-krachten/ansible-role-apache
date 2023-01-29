@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.4.0...v1.5.0) (2023-01-29)
+
+
+### Bug Fixes
+
+* Fix default variable settings ([339837e](https://github.com/de-it-krachten/ansible-role-apache/commit/339837e82d5f80edb5d5a4895a57482ad7257c15))
+
+
+### Features
+
+* Move defaults into new format ([a55cc98](https://github.com/de-it-krachten/ansible-role-apache/commit/a55cc982036c120f0fdde23acbf28dbc5e4b3ad2))
+
 # [1.4.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.3.1...v1.4.0) (2023-01-12)
 
 
