@@ -34,8 +34,8 @@ Supported platforms
 - Ubuntu 18.04 LTS
 - Ubuntu 20.04 LTS
 - Ubuntu 22.04 LTS
-- Fedora 35
 - Fedora 36
+- Fedora 37
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -45,7 +45,7 @@ Note:
 <pre><code>
 # Main path to create vhosts into
 apache_wwwdir: /var/www
-apache_vhostdir: '{{ apache_wwwdir }}'
+apache_vhostdir: /var/www
 
 # List of vhosts
 apache_vhosts: []
@@ -100,6 +100,10 @@ apache_ssl_conf: /etc/httpd/conf.d/ssl.conf
 # Default user / group
 apache_user: apache
 apache_group: apache
+
+# Main path to create vhosts into
+apache_wwwdir: /var/www
+apache_vhostdir: "{{ apache_wwwdir }}"
 </pre></code>
 
 ### defaults/family-Debian.yml
@@ -129,6 +133,43 @@ apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
 # Default user / group
 apache_user: www-data
 apache_group: www-data
+</pre></code>
+
+### defaults/defaults-apache-rockylinux9-node1-ansible-role-apache.yml
+<pre><code>
+apache_conf_dir: /etc/httpd/conf.d
+apache_fw_ports:
+-   port: 80
+    proto: tcp
+-   port: 443
+    proto: tcp
+apache_group: apache
+apache_logdir: /var/log/httpd
+apache_packages:
+- httpd
+- mod_ssl
+- openssl
+apache_service: httpd
+apache_ssl: true
+apache_ssl_certs_path: /etc/pki/tls/certs
+apache_ssl_chain: '{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.chain.crt'
+apache_ssl_conf: /etc/httpd/conf.d/ssl.conf
+apache_ssl_crt: '{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.crt'
+apache_ssl_fullchain: '{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.fullchain.crt'
+apache_ssl_key: '{{ apache_ssl_priv_path }}/{{ apache_fqdn }}.key'
+apache_ssl_priv_path: /etc/pki/tls/private
+apache_ssl_settings:
+    Listen: 443 {{ '127.0.0.1:' if (sslh_active is defined and sslh_active|bool) }}https
+    SSLCertificateChainFile: '{{ apache_ssl_chain }}'
+    SSLCertificateFile: '{{ apache_ssl_crt }}'
+    SSLCertificateKeyFile: '{{ apache_ssl_key }}'
+    SSLCipherSuite: HIGH:!aNULL:!MD5:!3DES:!SEED:!IDEA
+    SSLHonorCipherOrder: 'on'
+    SSLProtocol: all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+apache_user: apache
+apache_vhostdir: '{{ apache_wwwdir }}'
+apache_vhosts: []
+apache_wwwdir: /var/www
 </pre></code>
 
 

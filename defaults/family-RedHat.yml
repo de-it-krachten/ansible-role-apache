@@ -25,3 +25,7 @@ apache_ssl_conf: /etc/httpd/conf.d/ssl.conf
 # Default user / group
 apache_user: apache
 apache_group: apache
+
+# Main path to create vhosts into
+apache_wwwdir: /var/www
+apache_vhostdir: "{{ apache_wwwdir }}"
