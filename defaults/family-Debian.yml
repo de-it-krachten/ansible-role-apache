@@ -25,32 +25,3 @@ apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
 # Default user / group
 apache_user: www-data
 apache_group: www-data
-
-# Main path to create vhosts into
-apache_wwwdir: /var/www
-apache_vhostdir: /var/www
-
-# List of vhosts
-apache_vhosts: []
-
-# SSL/TLS keys
-apache_ssl: true
-apache_ssl_key: "{{ apache_ssl_priv_path }}/{{ apache_fqdn }}.key"
-apache_ssl_crt: "{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.crt"
-apache_ssl_chain: "{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.chain.crt"
-apache_ssl_fullchain: "{{ apache_ssl_certs_path }}/{{ apache_fqdn }}.fullchain.crt"
-
-# SSL/TLS settings
-apache_ssl_settings:
-  Listen: "443 {{ '127.0.0.1:' if (sslh_active is defined and sslh_active|bool) }}https"
-  SSLCertificateFile: '{{ apache_ssl_crt }}'
-  SSLCertificateKeyFile: '{{ apache_ssl_key }}'
-  SSLCertificateChainFile: '{{ apache_ssl_chain }}'
-  SSLProtocol: 'all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1'
-  SSLCipherSuite: 'HIGH:!aNULL:!MD5:!3DES:!SEED:!IDEA'
-  SSLHonorCipherOrder: 'on'
-
-# Defaul firewall ports
-apache_fw_ports:
-  - { port: 80, proto: tcp }
-  - { port: 443, proto: tcp }
