@@ -28,4 +28,4 @@ apache_group: apache
 
 # Main path to create vhosts into
 apache_wwwdir: /var/www
-apache_vhostdir: "{{ apache_wwwdir }}"
+apache_vhostdir: /var/www
