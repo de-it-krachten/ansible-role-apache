@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.5.0...v1.5.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* Move defaults back tp old set-up ([f668177](https://github.com/de-it-krachten/ansible-role-apache/commit/f668177ce892f055560e0e5294ac0b13742b2110))
+
 # [1.5.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.4.0...v1.5.0) (2023-01-29)
 
 
