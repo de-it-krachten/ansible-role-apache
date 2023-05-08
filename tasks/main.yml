@@ -1,45 +1,28 @@
 ---
 
-- name: Clear platform variables
+# Load OS specific vars
+- name: Load variables based on OS type
+  ansible.builtin.include_tasks: vars.yml
+
+# Install apache
+- name: Install apache
+  ansible.builtin.include_tasks: install.yml
+
+# Config apache
+- name: Config apache
+  ansible.builtin.include_tasks: config.yml
+
+# vhosts
+- name: Configure vhosts
+  ansible.builtin.include_tasks: vhost.yml
+  loop: "{{ apache_vhosts }}"
+  loop_control:
+    label:
+      - "{{ item.vhost }}"
+
+- name: Set some variables for other roles to use
   ansible.builtin.set_fact:
-    __defaults_vars: {}
-    __defaults_file: "{{ role_path }}/defaults/defaults-{{ inventory_hostname }}-{{ role_name }}.yml"
-
-- name: Create list of all platform default files
-  ansible.builtin.set_fact:
-    var_list: "{{ lookup('fileglob', 'defaults/*', wantlist=True) | regex_replace(role_path + '/') }}"
-
-- name: Load defaults based on OS type
-  ansible.builtin.set_fact:
-    # __defaults_vars: "{{ __defaults_vars | combine((lookup('template', item, errors='ignore') | from_yaml)) }}"
-    __defaults_vars: "{{ __defaults_vars | combine((lookup('file', item, errors='ignore') | from_yaml)) }}"
-  loop:
-    - "defaults/main.yml"
-    - "defaults/defaults.yml"
-    - "defaults/family-{{ ansible_os_family }}.yml"
-    - "defaults/family-{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-    - "defaults/{{ ansible_distribution }}.yml"
-    - "defaults/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  when: item in var_list
-
-- name: Write defaults to file
-  ansible.builtin.copy:
-    dest: "{{ __defaults_file }}"
-    content: "{{ __defaults_vars | to_nice_yaml }}"
-    mode: "0644"
-  become: false
-  changed_when: false
-  delegate_to: localhost
-
-- name: Execute role again using selected defaults
-  ansible.builtin.include_role:
-    name: "{{ role_name }}"
-    defaults_from: "{{ __defaults_file }}"
-    tasks_from: "main1.yml"
-
-- name: Delete temporary defaults
-  ansible.builtin.file:
-    path: "{{ __defaults_file }}"
-    state: absent
-  changed_when: false
-  delegate_to: localhost
+    webserver_in_use: apache
+    webserver_service: "{{ apache_service }}"
+    webserver_user: "{{ apache_user }}"
+    webserver_group: "{{ apache_group }}"
