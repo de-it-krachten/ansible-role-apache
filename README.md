@@ -29,13 +29,15 @@ Supported platforms
 - OracleLinux 9
 - AlmaLinux 8
 - AlmaLinux 9
-- Debian 10 (Buster)
+- SUSE Linux Enterprise<sup>1</sup>
+- openSUSE Leap 15
+- Debian 10 (Buster)<sup>1</sup>
 - Debian 11 (Bullseye)
-- Ubuntu 18.04 LTS
+- Debian 12 (Bookworm)
 - Ubuntu 20.04 LTS
 - Ubuntu 22.04 LTS
-- Fedora 36
 - Fedora 37
+- Fedora 38
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -132,7 +134,7 @@ apache_group: apache
 
 # Main path to create vhosts into
 apache_wwwdir: /var/www
-apache_vhostdir: "{{ apache_wwwdir }}"
+apache_vhostdir: /var/www
 </pre></code>
 
 
