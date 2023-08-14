@@ -23,9 +23,12 @@
   SSLCertificateChainFile {{ vhost_sslpath }}/{{ item.vhost }}.chain
 
 </VirtualHost>
-{% if item.allow_override_all is defined and item.allow_override_all|bool %}
 
-<Directory "{{ vhost_docroot }}">
+<Directory {{ vhost_docroot }}>
+{% if item.allow_override_all is defined and item.allow_override_all|bool %}
     AllowOverride All
-</Directory>
 {% endif %}
+{% if item.require_all_granted is defined and item.require_all_granted|bool %}
+    Require all granted
+{% endif %}
+</Directory>
