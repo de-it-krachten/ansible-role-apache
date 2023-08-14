@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.5.1...v1.6.0) (2023-08-14)
+
+
+### Bug Fixes
+
+* Fix support for (Open)SUSE ([df18209](https://github.com/de-it-krachten/ansible-role-apache/commit/df18209a9ff24f60249718b5ce7e26ee5bca46a9))
+
+
+### Features
+
+* Update supported platforms & CI ([aa1948d](https://github.com/de-it-krachten/ansible-role-apache/commit/aa1948d9244c54847eaaca508612ed42884c4c7d))
+
 ## [1.5.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.5.0...v1.5.1) (2023-05-08)
 
 
