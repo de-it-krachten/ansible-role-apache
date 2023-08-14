@@ -33,6 +33,9 @@ molecule:
           ssl_key: files/vhost1.example.com.key
           ssl_crt: files/vhost1.example.com.crt
           ssl_chain: files/vhost1.example.com.crt
+          index_html: true
+          allow_override_all: true
+          require_all_granted: true
         - vhost: vhost2.example.com
           alias: vhost2-alias.example.com
           domain: vhost2.example.com
@@ -44,6 +47,10 @@ molecule:
           ssl_key: "{{ openssl_server_key }}"
           ssl_crt: "{{ openssl_server_crt }}"
           ssl_chain: "{{ openssl_server_crt }}"
+          index_html: true
+          allow_override_all: true
+          require_all_granted: true
+
   requirements:
     roles_extra:
       - deitkrachten.openssl

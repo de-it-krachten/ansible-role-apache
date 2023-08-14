@@ -42,7 +42,7 @@
         regexp: '^(\s*)(#)?{{ item.key }}(\s*).*'
         replace: '\1{{ item.key }}\3{{ item.value }}'
       loop: "{{ apache_ssl_settings | dict2items }}"
-      when: apache_ssl|bool
+      when: apache_ssl | bool
       notify: Restart apache
 
 - name: SSL configuration on RedHat
@@ -55,8 +55,46 @@
         regexp: '^(#)?{{ item.key }}(\s*).*'
         replace: '{{ item.key }} {{ item.value }}'
       loop: "{{ apache_ssl_settings | dict2items }}"
-      when: apache_ssl|bool
+      when: apache_ssl | bool
       notify: Restart apache
+
+- name: SSL configuration on Suse
+  when: ansible_os_family == 'Suse'
+  block:
+
+    - name: Create apache webroot direcory
+      ansible.builtin.file:
+        path: "{{ apache_wwwdir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Create apache webroot direcory
+      ansible.builtin.file:
+        path: "{{ apache_wwwdir }}/html"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Configure SSL keys & certificates
+      ansible.builtin.replace:
+        path: '{{ apache_ssl_conf }}'
+        regexp: '^(#)?{{ item.key }}(\s*).*'
+        replace: '{{ item.key }} {{ item.value }}'
+      loop: "{{ apache_ssl_settings | dict2items }}"
+      when: apache_ssl | bool
+      notify: Restart apache
+
+    - name: Activate SSL
+      ansible.builtin.replace:
+        path: /etc/sysconfig/apache2
+        regexp: '^(#)?{{ item.key }}=.*'
+        replace: '{{ item.key }}="{{ item.value }}"'
+      loop:
+        - key: APACHE_SERVER_FLAGS
+          value: "-DSSL"
 
 - name: Create test index.html
   ansible.builtin.template:
@@ -65,4 +103,4 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
     mode: "0644"
-  when: apache_index_html is defined and apache_index_html|bool
+  when: apache_index_html is defined and apache_index_html | bool

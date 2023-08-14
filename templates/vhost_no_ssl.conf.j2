@@ -9,9 +9,12 @@
   CustomLog {{ apache_logdir }}/access_{{ item.vhost }}.log combined
 
 </VirtualHost>
-{% if item.allow_override_all is defined and item.allow_override_all|bool %}
 
-<Directory "{{ apache_vhostdir }}/{{ item.vhost }}">
+<Directory {{ vhost_docroot }}>
+{% if item.allow_override_all is defined and item.allow_override_all|bool %}
     AllowOverride All
-</Directory>
 {% endif %}
+{% if item.require_all_granted is defined and item.require_all_granted|bool %}
+    Require all granted
+{% endif %}
+</Directory>
