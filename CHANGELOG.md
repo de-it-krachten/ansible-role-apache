@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.6.0...v1.6.1) (2023-09-08)
+
+
+### Bug Fixes
+
+* Fix loop label to string ([7a1cb4e](https://github.com/de-it-krachten/ansible-role-apache/commit/7a1cb4ee4b8f979e183036d1037d4ee92f0acc2d))
+
 # [1.6.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.5.1...v1.6.0) (2023-08-14)
 
 
