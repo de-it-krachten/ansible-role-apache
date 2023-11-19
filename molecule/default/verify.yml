@@ -17,8 +17,7 @@
         mode: "0644"
       loop: "{{ apache_vhosts }}"
       loop_control:
-        label:
-          - "{{ item.vhost }}"
+        label: "{{ item.vhost }}"
 
     - name: Put all hosts in /etc/hosts  # noqa no-changed-when
       shell: |
@@ -26,8 +25,7 @@
       become: yes
       loop: "{{ apache_vhosts }}"
       loop_control:
-        label:
-          - "{{ item.vhost }}"
+        label: "{{ item.vhost }}"
 
     - name: Retrieving index.html
       get_url:
@@ -37,8 +35,7 @@
         mode: "0644"
       loop: "{{ apache_vhosts }}"
       loop_control:
-        label:
-          - "{{ item.vhost }}"
+        label: "{{ item.vhost }}"
 
     - name: Read output
       command: cat /tmp/{{ item.vhost }}.log
@@ -46,8 +43,7 @@
       register: _index_html
       loop: "{{ apache_vhosts }}"
       loop_control:
-        label:
-          - "{{ item.vhost }}"
+        label: "{{ item.vhost }}"
 
     - name: Check content
       fail:
@@ -55,5 +51,4 @@
       when: item.stdout != item.item.vhost
       loop: "{{ _index_html.results }}"
       loop_control:
-        label:
-          - "{{ item.item.vhost }}"
+        label: "{{ item.item.vhost }}"

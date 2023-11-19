@@ -17,8 +17,7 @@
   ansible.builtin.include_tasks: vhost.yml
   loop: "{{ apache_vhosts }}"
   loop_control:
-    label:
-      - "{{ item.vhost }}"
+    label: "{{ item.vhost }}"
 
 - name: Set some variables for other roles to use
   ansible.builtin.set_fact:
