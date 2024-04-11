@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.6.1...v1.6.2) (2024-04-11)
+
+
+### Bug Fixes
+
+* Change loop/label for latest ansible ([c5edffa](https://github.com/de-it-krachten/ansible-role-apache/commit/c5edffae64157fcbf835d68e8efad52365b11a09))
+
 ## [1.6.1](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.6.0...v1.6.1) (2023-09-08)
 
 
