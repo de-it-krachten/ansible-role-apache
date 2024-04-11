@@ -13,6 +13,7 @@ Manages apache webserver
 None
 
 #### Collections
+None
 
 ## Platforms
 
@@ -73,33 +74,37 @@ apache_fw_ports:
   - { port: 443, proto: tcp }
 </pre></code>
 
-### defaults/family-Debian.yml
+### defaults/family-RedHat.yml
 <pre><code>
 # SSL private + certificate store
-apache_ssl_certs_path: /etc/ssl/certs
-apache_ssl_priv_path: /etc/ssl/private
+apache_ssl_certs_path: /etc/pki/tls/certs
+apache_ssl_priv_path: /etc/pki/tls/private
 
 # Packages required
 apache_packages:
-  - apache2
-  - apache2-utils
+  - httpd
+  - mod_ssl
   - openssl
 
 # log directory
-apache_logdir: /var/log/apache2
+apache_logdir: /var/log/httpd
 
 # Apache service
-apache_service: apache2
+apache_service: httpd
 
 # Apache configuration directory
-apache_conf_dir: /etc/apache2/sites-available
+apache_conf_dir: /etc/httpd/conf.d
 
 # Apache SSL configuration
-apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
+apache_ssl_conf: /etc/httpd/conf.d/ssl.conf
 
 # Default user / group
-apache_user: www-data
-apache_group: www-data
+apache_user: apache
+apache_group: apache
+
+# Main path to create vhosts into
+apache_wwwdir: /var/www
+apache_vhostdir: /var/www
 </pre></code>
 
 ### defaults/family-Suse.yml
@@ -136,37 +141,33 @@ apache_user: wwwrun
 apache_group: wwwrun
 </pre></code>
 
-### defaults/family-RedHat.yml
+### defaults/family-Debian.yml
 <pre><code>
 # SSL private + certificate store
-apache_ssl_certs_path: /etc/pki/tls/certs
-apache_ssl_priv_path: /etc/pki/tls/private
+apache_ssl_certs_path: /etc/ssl/certs
+apache_ssl_priv_path: /etc/ssl/private
 
 # Packages required
 apache_packages:
-  - httpd
-  - mod_ssl
+  - apache2
+  - apache2-utils
   - openssl
 
 # log directory
-apache_logdir: /var/log/httpd
+apache_logdir: /var/log/apache2
 
 # Apache service
-apache_service: httpd
+apache_service: apache2
 
 # Apache configuration directory
-apache_conf_dir: /etc/httpd/conf.d
+apache_conf_dir: /etc/apache2/sites-available
 
 # Apache SSL configuration
-apache_ssl_conf: /etc/httpd/conf.d/ssl.conf
+apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
 
 # Default user / group
-apache_user: apache
-apache_group: apache
-
-# Main path to create vhosts into
-apache_wwwdir: /var/www
-apache_vhostdir: /var/www
+apache_user: www-data
+apache_group: www-data
 </pre></code>
 
 
