@@ -13,7 +13,7 @@ Manages apache webserver
 None
 
 #### Collections
-- community.general
+None
 
 ## Platforms
 
@@ -31,7 +31,6 @@ Supported platforms
 - AlmaLinux 9
 - SUSE Linux Enterprise 15<sup>1</sup>
 - openSUSE Leap 15
-- Debian 10 (Buster)<sup>1</sup>
 - Debian 11 (Bullseye)
 - Debian 12 (Bookworm)
 - Ubuntu 20.04 LTS
@@ -75,69 +74,6 @@ apache_fw_ports:
   - { port: 443, proto: tcp }
 </pre></code>
 
-### defaults/family-Debian.yml
-<pre><code>
-# SSL private + certificate store
-apache_ssl_certs_path: /etc/ssl/certs
-apache_ssl_priv_path: /etc/ssl/private
-
-# Packages required
-apache_packages:
-  - apache2
-  - apache2-utils
-  - openssl
-
-# log directory
-apache_logdir: /var/log/apache2
-
-# Apache service
-apache_service: apache2
-
-# Apache configuration directory
-apache_conf_dir: /etc/apache2/sites-available
-
-# Apache SSL configuration
-apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
-
-# Default user / group
-apache_user: www-data
-apache_group: www-data
-</pre></code>
-
-### defaults/family-Suse.yml
-<pre><code>
-# Main path to create vhosts into
-apache_wwwdir: /srv/www
-apache_vhostdir: /srv/www
-
-# SSL private + certificate store
-apache_ssl_certs_path: /etc/ssl/certs
-apache_ssl_priv_path: /etc/ssl/private
-
-# Packages required
-apache_packages:
-  - apache2
-  - apache2-utils
-  - apache2-mod_nss
-  - openssl
-
-# log directory
-apache_logdir: /var/log/apache2
-
-# Apache service
-apache_service: apache2
-
-# Apache configuration directory
-apache_conf_dir: /etc/apache2/conf.d
-
-# Apache SSL configuration
-apache_ssl_conf: /etc/apache2/ssl-global.conf
-
-# Default user / group
-apache_user: wwwrun
-apache_group: wwwrun
-</pre></code>
-
 ### defaults/family-RedHat.yml
 <pre><code>
 # SSL private + certificate store
@@ -171,6 +107,69 @@ apache_wwwdir: /var/www
 apache_vhostdir: /var/www
 </pre></code>
 
+### defaults/family-Suse.yml
+<pre><code>
+# Main path to create vhosts into
+# apache_wwwdir: /srv/www
+# apache_vhostdir: /srv/www
+
+# SSL private + certificate store
+apache_ssl_certs_path: /etc/ssl/certs
+apache_ssl_priv_path: /etc/ssl/private
+
+# Packages required
+apache_packages:
+  - apache2
+  - apache2-utils
+  - apache2-mod_nss
+  - openssl
+
+# log directory
+apache_logdir: /var/log/apache2
+
+# Apache service
+apache_service: apache2
+
+# Apache configuration directory
+apache_conf_dir: /etc/apache2/conf.d
+
+# Apache SSL configuration
+apache_ssl_conf: /etc/apache2/ssl-global.conf
+
+# Default user / group
+apache_user: wwwrun
+apache_group: wwwrun
+</pre></code>
+
+### defaults/family-Debian.yml
+<pre><code>
+# SSL private + certificate store
+apache_ssl_certs_path: /etc/ssl/certs
+apache_ssl_priv_path: /etc/ssl/private
+
+# Packages required
+apache_packages:
+  - apache2
+  - apache2-utils
+  - openssl
+
+# log directory
+apache_logdir: /var/log/apache2
+
+# Apache service
+apache_service: apache2
+
+# Apache configuration directory
+apache_conf_dir: /etc/apache2/sites-available
+
+# Apache SSL configuration
+apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
+
+# Default user / group
+apache_user: www-data
+apache_group: www-data
+</pre></code>
+
 
 
 
@@ -179,16 +178,28 @@ apache_vhostdir: /var/www
 <pre><code>
 - name: sample playbook for role 'apache'
   hosts: all
-  become: "yes"
+  become: 'yes'
   vars:
     openssl_fqdn: server.example.com
-    openssl_fqdn_additional: ['vhost1.example.com', 'vhost2.example.com']
+    openssl_fqdn_additional:
+      - vhost1.example.com
+      - vhost2.example.com
     apache_fqdn: server.example.com
-    apache_ssl_key: "{{ openssl_server_key }}"
-    apache_ssl_crt: "{{ openssl_server_crt }}"
-    apache_ssl_chain: "{{ openssl_server_crt }}"
-    apache_index_html: True
-    apache_vhosts: "[{'vhost': 'vhost1.example.com', 'alias': 'vhost1-alias.example.com', 'domain': 'vhost1.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_copy': True, 'ssl_key': 'files/vhost1.example.com.key', 'ssl_crt': 'files/vhost1.example.com.crt', 'ssl_chain': 'files/vhost1.example.com.crt', 'index_html': True, 'allow_override_all': True, 'require_all_granted': True}, {'vhost': 'vhost2.example.com', 'alias': 'vhost2-alias.example.com', 'domain': 'vhost2.example.com', 'template': 'vhost.conf.j2', 'listen': '*', 'port': '443', 'ssl': True, 'ssl_copy': True, 'ssl_key': '{{ openssl_server_key }}', 'ssl_crt': '{{ openssl_server_crt }}', 'ssl_chain': '{{ openssl_server_crt }}', 'index_html': True, 'allow_override_all': True, 'require_all_granted': True}]"
+    apache_ssl_key: '{{ openssl_server_key }}'
+    apache_ssl_crt: '{{ openssl_server_crt }}'
+    apache_ssl_chain: '{{ openssl_server_crt }}'
+    apache_index_html: true
+    apache_vhosts: '[{''vhost'': ''vhost1.example.com'', ''alias'': ''vhost1-alias.example.com'',
+      ''domain'': ''vhost1.example.com'', ''template'': ''vhost.conf.j2'', ''listen'':
+      ''*'', ''port'': ''443'', ''ssl'': True, ''ssl_copy'': True, ''ssl_key'': ''files/vhost1.example.com.key'',
+      ''ssl_crt'': ''files/vhost1.example.com.crt'', ''ssl_chain'': ''files/vhost1.example.com.crt'',
+      ''index_html'': True, ''allow_override_all'': True, ''require_all_granted'':
+      True}, {''vhost'': ''vhost2.example.com'', ''alias'': ''vhost2-alias.example.com'',
+      ''domain'': ''vhost2.example.com'', ''template'': ''vhost.conf.j2'', ''listen'':
+      ''*'', ''port'': ''443'', ''ssl'': True, ''ssl_copy'': True, ''ssl_key'': ''{{
+      openssl_server_key }}'', ''ssl_crt'': ''{{ openssl_server_crt }}'', ''ssl_chain'':
+      ''{{ openssl_server_crt }}'', ''index_html'': True, ''allow_override_all'':
+      True, ''require_all_granted'': True}]'
   roles:
     - deitkrachten.openssl
   tasks:
