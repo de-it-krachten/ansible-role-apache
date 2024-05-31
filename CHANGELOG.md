@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.6.2...v1.7.0) (2024-05-31)
+
+
+### Features
+
+* Add support for Ubuntu 24.04 LTS + Fedora 40 ([74d53ef](https://github.com/de-it-krachten/ansible-role-apache/commit/74d53efbad67f8744549dfed4469765f6d67873b))
+
 ## [1.6.2](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.6.1...v1.6.2) (2024-04-11)
 
 
