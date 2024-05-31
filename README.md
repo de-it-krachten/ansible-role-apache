@@ -35,8 +35,9 @@ Supported platforms
 - Debian 12 (Bookworm)
 - Ubuntu 20.04 LTS
 - Ubuntu 22.04 LTS
-- Fedora 37
-- Fedora 38
+- Ubuntu 24.04 LTS
+- Fedora 39
+- Fedora 40
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -72,6 +73,35 @@ apache_ssl_settings:
 apache_fw_ports:
   - { port: 80, proto: tcp }
   - { port: 443, proto: tcp }
+</pre></code>
+
+### defaults/family-Debian.yml
+<pre><code>
+# SSL private + certificate store
+apache_ssl_certs_path: /etc/ssl/certs
+apache_ssl_priv_path: /etc/ssl/private
+
+# Packages required
+apache_packages:
+  - apache2
+  - apache2-utils
+  - openssl
+
+# log directory
+apache_logdir: /var/log/apache2
+
+# Apache service
+apache_service: apache2
+
+# Apache configuration directory
+apache_conf_dir: /etc/apache2/sites-available
+
+# Apache SSL configuration
+apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
+
+# Default user / group
+apache_user: www-data
+apache_group: www-data
 </pre></code>
 
 ### defaults/family-RedHat.yml
@@ -139,35 +169,6 @@ apache_ssl_conf: /etc/apache2/ssl-global.conf
 # Default user / group
 apache_user: wwwrun
 apache_group: wwwrun
-</pre></code>
-
-### defaults/family-Debian.yml
-<pre><code>
-# SSL private + certificate store
-apache_ssl_certs_path: /etc/ssl/certs
-apache_ssl_priv_path: /etc/ssl/private
-
-# Packages required
-apache_packages:
-  - apache2
-  - apache2-utils
-  - openssl
-
-# log directory
-apache_logdir: /var/log/apache2
-
-# Apache service
-apache_service: apache2
-
-# Apache configuration directory
-apache_conf_dir: /etc/apache2/sites-available
-
-# Apache SSL configuration
-apache_ssl_conf: /etc/apache2/sites-available/default-ssl.conf
-
-# Default user / group
-apache_user: www-data
-apache_group: www-data
 </pre></code>
 
 
