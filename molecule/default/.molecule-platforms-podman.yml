@@ -86,10 +86,10 @@
   ci: false
   image: docker.io/geerlingguy/docker-fedora38-ansible:latest
 - name: fedora39
-  ci: true
+  ci: false
   image: docker.io/geerlingguy/docker-fedora39-ansible:latest
 - name: fedora40
-  ci: true
+  ci: false
   image: docker.io/geerlingguy/docker-fedora40-ansible:latest
 - name: alpine3
   ci: false

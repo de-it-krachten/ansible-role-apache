@@ -327,38 +327,6 @@ jobs:
             ansible_lint: "ansible-lint>6,<7"
             hetznercloud: True
 
-          # - name: fedora39_2.9
-          #   runs_on: ubuntu-latest
-          #   distro: fedora39
-          #   playbook: converge.yml
-          #   ansible: "ansible==2.9.27"
-          #   ansible_lint: "ansible-lint==5.4.0"
-          #   hetznercloud: True
-          # - name: fedora39_2.14
-          - name: fedora39
-            runs_on: ubuntu-latest
-            distro: fedora39
-            playbook: converge.yml
-            ansible: "ansible-core>2.16,<2.17"
-            ansible_lint: "ansible-lint>6,<7"
-            hetznercloud: True
-
-          # - name: fedora40_2.9
-          #   runs_on: ubuntu-latest
-          #   distro: fedora40
-          #   playbook: converge.yml
-          #   ansible: "ansible==2.9.27"
-          #   ansible_lint: "ansible-lint==5.4.0"
-          #   hetznercloud: True
-          # - name: fedora40_2.14
-          - name: fedora40
-            runs_on: ubuntu-latest
-            distro: fedora40
-            playbook: converge.yml
-            ansible: "ansible-core>2.16,<2.17"
-            ansible_lint: "ansible-lint>6,<7"
-            hetznercloud: True
-
 
     steps:
 

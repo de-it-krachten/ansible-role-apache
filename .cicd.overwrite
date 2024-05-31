@@ -7,6 +7,16 @@ generic:
   role_description: |
     Manages apache webserver 
 
+# Supported platforms
+platforms:
+  fedora39:
+    ci: false
+    supported: false
+  fedora40:
+    ci: false
+    supported: false
+
+# Molecule
 molecule:
   converge:
     roles:
