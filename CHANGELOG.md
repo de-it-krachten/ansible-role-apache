@@ -1,3 +1,14 @@
+# [1.9.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.8.0...v1.9.0) (2025-08-06)
+
+
+### Features
+
+* Add support for AlmaLinux 10 ([d15b6d0](https://github.com/de-it-krachten/ansible-role-apache/commit/d15b6d0ebfd812fa348facb32053a9470ba155e7))
+* Add support for Debian 13 (Trixie) ([612b331](https://github.com/de-it-krachten/ansible-role-apache/commit/612b331776bfc86439a4fd137a6ca3fa8b159a33))
+* Add support for OracleLinux 10 ([6bcfd48](https://github.com/de-it-krachten/ansible-role-apache/commit/6bcfd480e731f8df971df44f713499f23fc9e104))
+* Add support for Red Hat Enterprise Linux 10 ([4af94f4](https://github.com/de-it-krachten/ansible-role-apache/commit/4af94f4603912679d55a2b6a2654fc4e85110436))
+* Add support for RockyLinux 10 ([f1dbab4](https://github.com/de-it-krachten/ansible-role-apache/commit/f1dbab4e0136e2579a91596b4418a5a7ebf83214))
+
 # [1.8.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.7.0...v1.8.0) (2024-12-29)
 
 
