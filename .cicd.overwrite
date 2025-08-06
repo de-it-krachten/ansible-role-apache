@@ -9,10 +9,10 @@ generic:
 
 # Supported platforms
 platforms:
-  fedora39:
+  fedora41:
     ci: false
     supported: false
-  fedora40:
+  fedora42:
     ci: false
     supported: false
 
