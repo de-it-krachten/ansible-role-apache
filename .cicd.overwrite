@@ -9,12 +9,27 @@ generic:
 
 # Supported platforms
 platforms:
-  fedora41:
+  sles15:
+    supported: true
     ci: false
-    supported: false
+  sles16:
+    supported: true
+    ci: false
+  opensuse15:
+    supported: true
+    ci: true
+  opensuse16:
+    supported: true
+    ci: true
+  ubuntu2004:
+    supported: true
+    ci: true
   fedora42:
-    ci: false
     supported: false
+    ci: false
+  fedora43:
+    supported: false
+    ci: false
 
 # Molecule
 molecule:
