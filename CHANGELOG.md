@@ -1,3 +1,12 @@
+# [1.10.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.9.0...v1.10.0) (2026-03-15)
+
+
+### Features
+
+* Drop support for openSUSE Leap 15 ([e80ccbe](https://github.com/de-it-krachten/ansible-role-apache/commit/e80ccbecbcf53a04dd63d9b4d80dd837515ef0ef))
+* Drop support for SUSE Linux Enterprise 15 ([1137f32](https://github.com/de-it-krachten/ansible-role-apache/commit/1137f32100a00a75405d76271395dda18a5afe50))
+* Removed support for Fedora 43 ([13ed345](https://github.com/de-it-krachten/ansible-role-apache/commit/13ed3452d7eec4362ec588cfd8ee8e9fb9c64893))
+
 # [1.9.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.8.0...v1.9.0) (2025-08-06)
 
 
