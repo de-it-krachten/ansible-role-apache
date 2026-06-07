@@ -12,10 +12,10 @@ platforms:
   ubuntu2004:
     supported: true
     ci: true
-  fedora42:
+  fedora43:
     supported: false
     ci: false
-  fedora43:
+  fedora44:
     supported: false
     ci: false
 
