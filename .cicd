@@ -1214,6 +1214,10 @@ ado:
 
 # molecule
 molecule:
+  phase1:
+    - rockylinux10
+    - ubuntu2604
+    - debian13
 #  scenario:
 #    test_sequence:
 #      - dependency     # Install requirements

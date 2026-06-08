@@ -53,6 +53,10 @@ apache_vhostdir: /var/www
 # List of vhosts
 apache_vhosts: []
 
+# SSL private + certificate store
+apache_ssl_certs_path: "{{ '/etc/pki/tls/certs' if ansible_facts.os_family == 'RedHat' else '/etc/ssl/certs' }}"
+apache_ssl_priv_path: "{{ '/etc/pki/tls/private' if ansible_facts.os_family == 'RedHat' else '/etc/ssl/private' }}"
+
 # SSL/TLS keys
 apache_ssl: true
 apache_ssl_key: "{{ apache_ssl_priv_path }}/{{ apache_fqdn }}.key"
@@ -192,17 +196,35 @@ apache_group: wwwrun
     apache_ssl_crt: '{{ openssl_server_crt }}'
     apache_ssl_chain: '{{ openssl_server_crt }}'
     apache_index_html: true
-    apache_vhosts: '[{''vhost'': ''vhost1.example.com'', ''alias'': ''vhost1-alias.example.com'',
-      ''domain'': ''vhost1.example.com'', ''template'': ''vhost.conf.j2'', ''listen'':
-      ''*'', ''port'': ''443'', ''ssl'': True, ''ssl_copy'': True, ''ssl_key'': ''files/vhost1.example.com.key'',
-      ''ssl_crt'': ''files/vhost1.example.com.crt'', ''ssl_chain'': ''files/vhost1.example.com.crt'',
-      ''index_html'': True, ''allow_override_all'': True, ''require_all_granted'':
-      True}, {''vhost'': ''vhost2.example.com'', ''alias'': ''vhost2-alias.example.com'',
-      ''domain'': ''vhost2.example.com'', ''template'': ''vhost.conf.j2'', ''listen'':
-      ''*'', ''port'': ''443'', ''ssl'': True, ''ssl_copy'': True, ''ssl_key'': ''{{
-      openssl_server_key }}'', ''ssl_crt'': ''{{ openssl_server_crt }}'', ''ssl_chain'':
-      ''{{ openssl_server_crt }}'', ''index_html'': True, ''allow_override_all'':
-      True, ''require_all_granted'': True}]'
+    apache_vhosts:
+      - vhost: vhost1.example.com
+        alias: vhost1-alias.example.com
+        domain: vhost1.example.com
+        template: vhost.conf.j2
+        listen: '*'
+        port: '443'
+        ssl: true
+        ssl_copy: true
+        ssl_key: files/vhost1.example.com.key
+        ssl_crt: files/vhost1.example.com.crt
+        ssl_chain: files/vhost1.example.com.crt
+        index_html: true
+        allow_override_all: true
+        require_all_granted: true
+      - vhost: vhost2.example.com
+        alias: vhost2-alias.example.com
+        domain: vhost2.example.com
+        template: vhost.conf.j2
+        listen: '*'
+        port: '443'
+        ssl: true
+        ssl_copy: true
+        ssl_key: '{{ openssl_server_key }}'
+        ssl_crt: '{{ openssl_server_crt }}'
+        ssl_chain: '{{ openssl_server_crt }}'
+        index_html: true
+        allow_override_all: true
+        require_all_granted: true
   roles:
     - deitkrachten.openssl
   tasks:
