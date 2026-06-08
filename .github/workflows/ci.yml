@@ -221,16 +221,6 @@ jobs:
             python: "3.13"
             hetznercloud: True
 
-          - name: debian13
-            runs_on: ubuntu-22.04
-            distro: debian13
-            playbook: converge.yml
-            venv: "ansiblecore220"
-            ansible: "ansible-core>2.20,<2.21"
-            ansible_lint: "ansible-lint"
-            python: "3.13"
-            hetznercloud: True
-
           - name: ubuntu2604
             runs_on: ubuntu-22.04
             distro: ubuntu2604
@@ -489,6 +479,16 @@ jobs:
           - name: debian12
             runs_on: ubuntu-22.04
             distro: debian12
+            playbook: converge.yml
+            venv: "ansiblecore220"
+            ansible: "ansible-core>2.20,<2.21"
+            ansible_lint: "ansible-lint"
+            python: "3.13"
+            hetznercloud: True
+
+          - name: debian13
+            runs_on: ubuntu-22.04
+            distro: debian13
             playbook: converge.yml
             venv: "ansiblecore220"
             ansible: "ansible-core>2.20,<2.21"
