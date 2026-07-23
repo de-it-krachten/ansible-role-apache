@@ -1,7 +1,7 @@
 ---
 
 - name: SSL configuration on Debian
-  when: ansible_os_family == 'Debian'
+  when: ansible_facts.os_family == 'Debian'
   block:
 
     - name: Configure SSL
@@ -46,7 +46,7 @@
       notify: Restart apache
 
 - name: SSL configuration on RedHat
-  when: ansible_os_family == 'RedHat'
+  when: ansible_facts.os_family == 'RedHat'
   block:
 
     - name: Configure SSL keys & certificates
@@ -59,7 +59,7 @@
       notify: Restart apache
 
 - name: SSL configuration on Suse
-  when: ansible_os_family == 'Suse'
+  when: ansible_facts.os_family == 'Suse'
   block:
 
     - name: Create apache webroot direcory
