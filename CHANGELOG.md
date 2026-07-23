@@ -1,3 +1,16 @@
+# [1.11.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.10.0...v1.11.0) (2026-07-23)
+
+
+### Bug Fixes
+
+* Standarize vars.yml ([d74942a](https://github.com/de-it-krachten/ansible-role-apache/commit/d74942a9edc9aa09eea469bd3a73ef18e6723545))
+
+
+### Features
+
+* Add support for ansible-core 2.20+ ([86fc04c](https://github.com/de-it-krachten/ansible-role-apache/commit/86fc04cc7a854ee75f0a03a9c7fa80a63cc92cf5))
+* Added support for Ubuntu 26.04 LTS ([2b0dde0](https://github.com/de-it-krachten/ansible-role-apache/commit/2b0dde0b8574febe1c46e755129e610c805fc6fb))
+
 # [1.10.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.9.0...v1.10.0) (2026-03-15)
 
 
