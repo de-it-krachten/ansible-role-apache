@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.11.0...v1.12.0) (2026-10-13)
+
+
+### Features
+
+* Drop support for Debian 11 (Bullseye) ([a5940cc](https://github.com/de-it-krachten/ansible-role-apache/commit/a5940cc1da107322ea02da24321b2cdf574b1d8c))
+
 # [1.11.0](https://github.com/de-it-krachten/ansible-role-apache/compare/v1.10.0...v1.11.0) (2026-07-23)
 
 
